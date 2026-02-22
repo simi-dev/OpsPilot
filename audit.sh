@@ -123,6 +123,7 @@ audit_security() {
     fi
 }
 
+# Remote execution
 if [ -n "${REMOTE_HOST:-}" ]; then
     # Copy the script to the remote, run it there, get output back
     scp "$0" "${REMOTE_HOST}:/tmp/opspilot-audit.sh"
