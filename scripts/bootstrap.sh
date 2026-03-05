@@ -2,6 +2,7 @@
 set -euo pipefail
 
 LOG_FILE="/var/log/opspilot/bootstrap.log"
+NODE_MAJOR="20"
 
 # Log function
 log() {
@@ -22,9 +23,16 @@ apt-get update -y
 section "Go installation"
 apt install golang -y
 
-section "NodeJS installation"
-apt install nodejs -y
-apt install npm -y
+section "Node.js installation"
+
+if command_exists node; then
+  log "Node.js already installed: $(node -v). Skipping."
+else
+  log "Installing Node.js $NODE_MAJOR..."
+  curl -fsSL "https://deb.nodesource.com/setup_${NODE_MAJOR}.x" | bash -
+  apt-get install -y nodejs
+  log "Node.js installed: $(node -v)"
+fi
 
 section "PostgresSql installation"
 apt install postgresql postgresql-contrib -y
